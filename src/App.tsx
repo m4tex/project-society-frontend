@@ -1,10 +1,18 @@
-import './App.css';
+import ThemeProvider from "./store/ThemeProvider";
+import {createGlobalStyle} from "styled-components";
+import Theme from "./types/Theme";
+
+const BackgroundThemeStyle = createGlobalStyle`
+  body {
+    background-color: ${(props:{theme: Theme}) => props.theme.backgroundColor};
+  }
+`
 
 function App() {
     return (
-        <div>
-
-        </div>
+        <ThemeProvider>
+            <BackgroundThemeStyle />
+        </ThemeProvider>
     );
 }
 
