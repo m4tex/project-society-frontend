@@ -1,17 +1,36 @@
 import ThemeProvider from "./store/ThemeProvider";
-import {createGlobalStyle} from "styled-components";
 import Theme from "./types/Theme";
+import {createGlobalStyle} from "styled-components";
+
+import {Routes, Route} from "react-router-dom";
+import Header from './components/layout/Header'
+import SchedulePage from "./pages/SchedulePage";
+import HomePage from "./pages/HomePage";
+import ClassroomPage from "./pages/ClassroomPage";
+import OverviewPage from "./pages/OverviewPage";
+import PomodoroPage from "./pages/tools-pages/PomodoroPage";
+import LearnPage from "./pages/tools-pages/LearnPage";
 
 const BackgroundThemeStyle = createGlobalStyle`
   body {
-    background-color: ${(props:{theme: Theme}) => props.theme.backgroundColor};
+    background-color: ${(props: { theme: Theme }) => props.theme.backgroundColor};
   }
 `
 
 function App() {
     return (
         <ThemeProvider>
-            <BackgroundThemeStyle />
+            <BackgroundThemeStyle/>
+            <Routes>
+                <Route path='/' element={<Header/>}>
+                    <Route index element={<SchedulePage/>}/>
+                    <Route path='home' element={<HomePage />}/>
+                    <Route path='classroom' element={<ClassroomPage />}/>
+                    <Route path='overview' element={<OverviewPage />}/>
+                    <Route path='pomodoro' element={<PomodoroPage />}/>
+                    <Route path='learn' element={<LearnPage />}/>
+                </Route>
+            </Routes>
         </ThemeProvider>
     );
 }

@@ -2,6 +2,11 @@ import {ThemeProvider} from "styled-components";
 import {useState} from "react";
 import Theme from '../types/Theme'
 
+const data = {
+    theme: 'custom',
+    themeColors: []
+}
+
 const lightModeColors = [
     '#EDEDED',
     '#FFFFFF',
