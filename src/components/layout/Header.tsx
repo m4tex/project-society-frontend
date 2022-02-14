@@ -48,17 +48,29 @@ const BetaBadge = styled.div`
 `
 
 const HeaderNavigation = styled.nav`
-  margin-left: 20px;
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+
+  margin-left: 40px;
   font-weight: bold;
+
+  p {
+    margin: auto 0;
+  }
+`
+
+const NavLink = styled.p`
+  color: ${(props: { theme: Theme, selected: boolean | undefined }) => props.selected ? props.theme.interactableColor : props.theme.tertiaryColor};
 `
 
 const NavUnderline = styled.div`
   position: absolute;
-  height: 10spx;
+  height: 10px;
   width: 100px;
   left: 100px;
   top: 100px;
-  color: ${(props : {theme: Theme }) => props.theme.accentColor};
+  color: ${(props: { theme: Theme }) => props.theme.accentColor};
 `
 
 function Header() {
@@ -68,19 +80,21 @@ function Header() {
     return (
         <>
             <StyledHeader>
-                <h1>Unitor<div className='logo-dot'/></h1>
+                <h1>Unitor
+                    <div className='logo-dot'/>
+                </h1>
                 <BetaBadge>Beta</BetaBadge>
 
                 <HeaderNavigation>
-                    <p onClick={() => nav('/')} >Home</p>
-                    <p onClick={() => nav('/schedule')}>Schedule</p>
+                    <p onClick={() => nav('/home')}>Home</p>
+                    <p onClick={() => nav('/')}>Schedule</p>
                     <p onClick={() => nav('/classroom')}>Classroom</p>
                     <p onClick={() => nav('/overview')}>Overview</p>
-                    <p onClick={() => nav('/tools')}>Tools</p>
-                    <NavUnderline />
+                    <p>Tools</p>
+                    <NavUnderline/>
                 </HeaderNavigation>
             </StyledHeader>
-            <Outlet />
+            <Outlet/>
         </>
     );
 }
