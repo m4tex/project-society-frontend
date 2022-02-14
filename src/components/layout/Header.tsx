@@ -1,5 +1,5 @@
 import {Outlet, useNavigate} from "react-router-dom";
-import {useState} from "react";
+import {useReducer, useRef} from "react";
 import styled from "styled-components";
 import Theme from "../../types/Theme";
 
@@ -54,44 +54,92 @@ const HeaderNavigation = styled.nav`
 
   margin-left: 40px;
   font-weight: bold;
-
+  
   p {
     margin: auto 0;
   }
 `
 
 const NavLink = styled.p`
-  color: ${(props: { theme: Theme, selected: boolean | undefined }) => props.selected ? props.theme.interactableColor : props.theme.tertiaryColor};
+  color: ${(props: { theme: Theme, selected: boolean }) => props.selected ? props.theme.interactableColor : props.theme.tertiaryColor};
+  margin: auto 0;
 `
 
-const NavUnderline = styled.div`
+type IndicatorProps = {left:number, width:number, theme: Theme}
+
+const NavIndicator = styled.div`
   position: absolute;
-  height: 10px;
-  width: 100px;
-  left: 100px;
-  top: 100px;
-  color: ${(props: { theme: Theme }) => props.theme.accentColor};
+  background-color: ${(props: IndicatorProps) => props.theme.accentColor};
+  
+  height: 2px;
+  bottom: 0;
+  
+  width: ${(props : IndicatorProps) => props.width}px;
+  left: ${(props : IndicatorProps) => props.left}px;
+  
+  transition: left 0.3s ease-out, width 0.3s ease-in;
 `
 
 function Header() {
-    const [navSelected, setNavSelected] = useState(0);
+    const navSelectionInitState = {
+        selections: [false, true, false, false],
+        indicatorLeft: 0,
+        indicatorWidth: 0
+    }
+
+    type NavState = typeof navSelectionInitState
+
     const nav = useNavigate();
+
+    const nav1 = useRef<HTMLParagraphElement>(null);
+    const nav2 = useRef<HTMLParagraphElement>(null);
+    const nav3 = useRef<HTMLParagraphElement>(null);
+    const nav4 = useRef<HTMLParagraphElement>(null);
+
+    const navs = [nav1, nav2, nav3, nav4];
+
+    const [navState, dispatchNavState] = useReducer(navSelectionHandler, navSelectionInitState)
+
+    dispatchNavState(1);
+
+    function navSelectionHandler(state:NavState, index: number){
+        let selections = [false, false, false, false];
+        selections[index] = true;
+
+        switch (index){
+            case 0:
+                nav('/home');
+                break;
+            case 1:
+                nav('/');
+                break;
+            case 2:
+                nav('/classroom');
+                break;
+            case 3:
+                nav('/overview');
+                break;
+        }
+
+        return {
+            selections: selections,
+            indicatorWidth: navs[index].current!.offsetWidth,
+            indicatorLeft: navs[index].current!.offsetLeft,
+        }
+    }
 
     return (
         <>
             <StyledHeader>
-                <h1>Unitor
-                    <div className='logo-dot'/>
-                </h1>
+                <h1>Unitor<div className='logo-dot'/></h1>
                 <BetaBadge>Beta</BetaBadge>
-
                 <HeaderNavigation>
-                    <p onClick={() => nav('/home')}>Home</p>
-                    <p onClick={() => nav('/')}>Schedule</p>
-                    <p onClick={() => nav('/classroom')}>Classroom</p>
-                    <p onClick={() => nav('/overview')}>Overview</p>
+                    <NavLink selected={navState.selections[0]} ref={nav1} onClick={() => dispatchNavState(0)}>Home</NavLink>
+                    <NavLink selected={navState.selections[1]} ref={nav2} onClick={() => dispatchNavState(1)}>Schedule</NavLink>
+                    <NavLink selected={navState.selections[2]} ref={nav3} onClick={() => dispatchNavState(2)}>Classroom</NavLink>
+                    <NavLink selected={navState.selections[3]} ref={nav4} onClick={() => dispatchNavState(3)}>Overview</NavLink>
                     <p>Tools</p>
-                    <NavUnderline/>
+                    <NavIndicator left={navState.indicatorLeft} width={navState.indicatorWidth} />
                 </HeaderNavigation>
             </StyledHeader>
             <Outlet/>
