@@ -83,8 +83,8 @@ const NavIndicator = styled.div`
 function Header() {
     const navSelectionInitState = {
         selections: [false, true, false, false],
-        indicatorLeft: 0,
-        indicatorWidth: 0
+        indicatorLeft: 265,
+        indicatorWidth: 73
     }
 
     type NavState = typeof navSelectionInitState
@@ -100,9 +100,11 @@ function Header() {
 
     const [navState, dispatchNavState] = useReducer(navSelectionHandler, navSelectionInitState)
 
-    dispatchNavState(1);
-
     function navSelectionHandler(state:NavState, index: number){
+        if(state.selections.indexOf(true) === index){
+            return state;
+        }
+
         let selections = [false, false, false, false];
         selections[index] = true;
 
