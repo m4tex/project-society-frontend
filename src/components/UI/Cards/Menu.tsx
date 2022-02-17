@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Theme from '../../../types/Theme';
 import MenuCard from "./MenuCard";
+import {useDetectClickOutside} from 'react-detect-click-outside';
 
 const StyledMenuCard = styled(MenuCard)`
     display: flex;
@@ -24,9 +25,11 @@ const Option = styled.p`
 
 interface MenuOption { name:string, click:()=>void }
 
-function Menu(props : { options:MenuOption[], className:string }) {
+function Menu(props : { options:MenuOption[], className:string, onClose:()=>void }) {
+    const ref = useDetectClickOutside({onTriggered: props.onClose})
+
     return (
-        <StyledMenuCard className={props.className}>
+        <StyledMenuCard className={props.className} ref={ref}>
             {props.options.map(option => <Option key={Math.random()} onClick={option.click}>{option.name}</Option>)}
         </StyledMenuCard>
     );

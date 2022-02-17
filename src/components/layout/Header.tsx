@@ -140,7 +140,7 @@ function Header() {
     })
 
     function navDropMenuHandler() {
-        setDropdownShown((prevState => !prevState));
+        setDropdownShown(prevState => !prevState);
     }
 
     //endregion
@@ -191,7 +191,8 @@ function Header() {
             indicatorLeft: navs[index].current!.offsetLeft,
             indicatorWidth: navs[index].current!.offsetWidth
         });
-    }, [location])
+    }, [location]); //eslint-disable-line
+    //Disabled the eslint above because it wanted me to add a dependency that would cause a loop.
     //endregion
 
     const toolsOptions = [
@@ -218,7 +219,7 @@ function Header() {
                     <NavDropmenu ref={nav5} selected={navState.navLinkSelection[4]} onClick={navDropMenuHandler}>
                         <p>Tools</p>
                         <span className="material-icons">expand_{dropdownShown ? 'less' : 'more'}</span>
-                        {dropdownShown && <Menu className='tools-menu-list' options={toolsOptions}/>}
+                        {dropdownShown && <Menu className='tools-menu-list' options={toolsOptions} onClose={navDropMenuHandler}/>}
                     </NavDropmenu>
                     <NavIndicator left={navState.indicatorLeft} width={navState.indicatorWidth}/>
                 </HeaderNavigation>
