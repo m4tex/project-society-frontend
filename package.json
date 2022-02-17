@@ -28,7 +28,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "https://10.250.216.112:8000",
+  "proxy": "https://schooli.com",
   "eslintConfig": {
     "extends": [
       "react-app",

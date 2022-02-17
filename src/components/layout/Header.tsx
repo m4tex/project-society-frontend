@@ -1,5 +1,5 @@
 import {Outlet, useNavigate, useLocation} from "react-router-dom";
-import {useReducer, useRef, useEffect, useState} from "react";
+import {useRef, useEffect, useState} from "react";
 import styled from "styled-components";
 import Theme from "../../types/Theme";
 import Menu from "../UI/Cards/Menu";
@@ -85,7 +85,7 @@ const NavDropmenu = styled.div`
   position: relative;
   height: 100%;
   float: left;
-  padding: 0 20px;
+  padding: 0 10px 0 20px;
   line-height: 65px;
   z-index: 6;
 
@@ -133,6 +133,11 @@ type IndicatorProps = { left: number, width: number, theme: Theme }
 function Header() {
     //region stuff I will rarely change
     const [dropdownShown, setDropdownShown] = useState(false);
+    const [navState, setNavState] = useState({
+        navLinkSelection: [false, true, false, false, false],
+        indicatorLeft: 0,
+        indicatorWidth: 0,
+    })
 
     function navDropMenuHandler() {
         setDropdownShown((prevState => !prevState));
@@ -140,14 +145,6 @@ function Header() {
 
     //endregion
     //region navigation selection variables
-    const navSelectionInitState = {
-        selections: [false, true, false, false, false],
-        indicatorLeft: 94,
-        indicatorWidth: 122
-    }
-
-    type NavState = typeof navSelectionInitState
-
     const nav = useNavigate();
     const location = useLocation();
 
@@ -156,12 +153,9 @@ function Header() {
     const nav3 = useRef<HTMLParagraphElement>(null);
     const nav4 = useRef<HTMLParagraphElement>(null);
     const nav5 = useRef<HTMLDivElement>(null);
-
     const navs = [nav1, nav2, nav3, nav4, nav5];
 
-    const [navState, dispatchNavState] = useReducer(navSelectionHandler, navSelectionInitState)
-
-    //In case the user navigates the website by changing the URL
+    //When the direction changes
     useEffect(() => {
         let index: number;
 
@@ -178,67 +172,31 @@ function Header() {
             case '/overview':
                 index = 3;
                 break;
-            default:
-                index = -1;
-                break;
             case '/pomodoro':
                 index = 4;
                 break;
             case '/learn':
-                index = 5;
+                index = 4;
+                break;
+            default:
+                index = -1;
                 break;
         }
-
-        dispatchNavState(index);
-    }, [location])
-
-    function navSelectionHandler(state: NavState, _index: number) {
-        const index = _index > 4 ? 4 : _index;
-
-        if (state.selections.indexOf(true) === index) {
-            return state;
-        }
-        if (dropdownShown) {
-            navDropMenuHandler()
-        }
-
 
         let selections = [false, false, false, false, false];
         selections[index] = true;
-        console.log(_index)
-        switch (_index) {
-            case 0:
-                nav('/home');
-                break;
-            case 1:
-                nav('/');
-                break;
-            case 2:
-                nav('/classroom');
-                break;
-            case 3:
-                nav('/overview');
-                break;
-            case 4:
-                nav('/pomodoro');
-                break;
-            case 5:
-                nav('/learn');
-                break;
-        }
 
-        return {
-            selections: selections,
-            indicatorWidth: navs[index].current!.offsetWidth,
+        setNavState({
+            navLinkSelection: selections,
             indicatorLeft: navs[index].current!.offsetLeft,
-        }
-    }
-
+            indicatorWidth: navs[index].current!.offsetWidth
+        });
+    }, [location])
     //endregion
 
     const toolsOptions = [
-        {name: 'Pomodoro', click: () => dispatchNavState(4)},
-        {name: 'Learn', click: () => dispatchNavState(5)}
+        {name: 'Pomodoro', click: () => nav('/pomodoro')},
+        {name: 'Learn', click: () => nav('/learn')}
     ]
 
     return (
@@ -249,15 +207,15 @@ function Header() {
                 </h1>
                 <BetaBadge>Beta</BetaBadge>
                 <HeaderNavigation>
-                    <NavLink selected={navState.selections[0]} ref={nav1}
-                             onClick={() => dispatchNavState(0)}>Home</NavLink>
-                    <NavLink selected={navState.selections[1]} ref={nav2}
-                             onClick={() => dispatchNavState(1)}>Schedule</NavLink>
-                    <NavLink selected={navState.selections[2]} ref={nav3}
-                             onClick={() => dispatchNavState(2)}>Classroom</NavLink>
-                    <NavLink selected={navState.selections[3]} ref={nav4}
-                             onClick={() => dispatchNavState(3)}>Overview</NavLink>
-                    <NavDropmenu ref={nav5} selected={navState.selections[4]} onClick={navDropMenuHandler}>
+                    <NavLink selected={navState.navLinkSelection[0]} ref={nav1}
+                             onClick={() => nav('/home')}>Home</NavLink>
+                    <NavLink selected={navState.navLinkSelection[1]} ref={nav2}
+                             onClick={() => nav('/')}>Schedule</NavLink>
+                    <NavLink selected={navState.navLinkSelection[2]} ref={nav3}
+                             onClick={() => nav('/classroom')}>Classroom</NavLink>
+                    <NavLink selected={navState.navLinkSelection[3]} ref={nav4}
+                             onClick={() => nav('/overview')}>Overview</NavLink>
+                    <NavDropmenu ref={nav5} selected={navState.navLinkSelection[4]} onClick={navDropMenuHandler}>
                         <p>Tools</p>
                         <span className="material-icons">expand_{dropdownShown ? 'less' : 'more'}</span>
                         {dropdownShown && <Menu className='tools-menu-list' options={toolsOptions}/>}
@@ -270,4 +228,4 @@ function Header() {
     );
 }
 
-export default Header; // REMOVE THE NAVVING IN DISPATCH NEW NAV SELECTION
+export default Header;
