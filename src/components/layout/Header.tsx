@@ -1,8 +1,10 @@
 import {Outlet, useNavigate, useLocation} from "react-router-dom";
-import {useRef, useEffect, useState} from "react";
+import {useRef, useEffect, useState, useContext} from "react";
 import styled from "styled-components";
 import Theme from "../../types/Theme";
 import Menu from "../UI/Cards/Menu";
+import AvatarCircle from "../UI/AvatarCircle";
+import {MainContext} from "../../store/MainProvider";
 
 const StyledHeader = styled.header`
   position: relative;
@@ -21,6 +23,10 @@ const StyledHeader = styled.header`
     margin: auto 0;
     font-family: 'Chivo', sans-serif;
     font-weight: bold;
+  }
+  
+  h1:hover {
+    cursor: pointer;
   }
 
   .logo-dot {
@@ -51,6 +57,45 @@ const BetaBadge = styled.div`
   padding: 2px 10px;
 `
 
+const AccountNavSection = styled.div`
+  position: absolute;
+  right: 0;
+  height: 100%;
+
+  margin-right: 20px;
+
+  .material-icons {
+    font-size: 30px;
+  }
+
+  .avatar {
+    display: inline-block;
+    margin: 12.5px 0;
+  }
+
+  .account-menu {
+    position: relative;
+    right: -8px;
+    transform: scale(120%);
+  }
+  
+  span {
+    position: relative;
+    line-height: 65px;
+    top: -17.5px;
+    height: 100%;
+  }
+
+  span:hover{
+    cursor: pointer;
+  }
+  
+  span:first-child {
+    color: ${(props: { theme: Theme }) => props.theme.secondaryColor};
+    margin-right: 10px;
+  }
+`
+
 const NavIndicator = styled.div`
   position: absolute;
   background-color: ${(props: IndicatorProps) => props.theme.accentColor};
@@ -78,6 +123,10 @@ const NavLink = styled.p`
   line-height: 65px;
   padding: 0 20px;
   z-index: 100;
+  
+  &:hover {
+    cursor: pointer;
+  }
 `
 
 const NavDropmenu = styled.div`
@@ -88,7 +137,11 @@ const NavDropmenu = styled.div`
   padding: 0 10px 0 20px;
   line-height: 65px;
   z-index: 6;
-
+  
+  &:hover{
+    cursor: pointer;
+  }
+  
   p {
     position: relative;
     float: left;
@@ -105,12 +158,13 @@ const NavDropmenu = styled.div`
   }
 
   .tools-menu-list {
+    cursor: default;
     position: relative;
     width: 70px;
-  
+
     top: 5px;
     left: -85px;
-    
+
     border-radius: 18px;
     text-align: center;
 
@@ -133,6 +187,8 @@ type IndicatorProps = { left: number, width: number, theme: Theme }
 function Header() {
     //region stuff I will rarely change
     const [dropdownShown, setDropdownShown] = useState(false);
+    const [accountMenuShown, setAccountMenuShown] = useState(false);
+
     const [navState, setNavState] = useState({
         navLinkSelection: [false, true, false, false, false],
         indicatorLeft: 0,
@@ -143,6 +199,11 @@ function Header() {
         setDropdownShown(prevState => !prevState);
     }
 
+    function accountMenuHandler() {
+        setAccountMenuShown(prevState => !prevState)
+    }
+
+    const mainContext = useContext(MainContext);
     //endregion
     //region navigation selection variables
     const nav = useNavigate();
@@ -199,11 +260,17 @@ function Header() {
         {name: 'Pomodoro', click: () => nav('/pomodoro')},
         {name: 'Learn', click: () => nav('/learn')}
     ]
+    const accountOptions = [
+        {name: 'Account', click: () => nav('/account')},
+        {name: 'Settings', click: () => nav('/settings')},
+        {name: 'About Us', click: () => nav('/about-us')},
+        {name: 'Log Out', click: () => mainContext.logOut()},
+    ]
 
     return (
         <>
             <StyledHeader>
-                <h1>Unitor
+                <h1 onClick={()=> nav('/home')}>Unitor
                     <div className='logo-dot'/>
                 </h1>
                 <BetaBadge>Beta</BetaBadge>
@@ -219,10 +286,17 @@ function Header() {
                     <NavDropmenu ref={nav5} selected={navState.navLinkSelection[4]} onClick={navDropMenuHandler}>
                         <p>Tools</p>
                         <span className="material-icons">expand_{dropdownShown ? 'less' : 'more'}</span>
-                        {dropdownShown && <Menu className='tools-menu-list' options={toolsOptions} onClose={navDropMenuHandler}/>}
+                        {dropdownShown &&
+                            <Menu className='tools-menu-list' options={toolsOptions} onClose={navDropMenuHandler}/>}
                     </NavDropmenu>
                     <NavIndicator left={navState.indicatorLeft} width={navState.indicatorWidth}/>
                 </HeaderNavigation>
+                <AccountNavSection>
+                    <span className='material-icons'>notifications</span>
+                    <AvatarCircle className='avatar' src='none'/>
+                    <span className="material-icons" onClick={accountMenuHandler}>more_vert</span>
+                    {accountMenuShown && <Menu options={accountOptions} onClose={accountMenuHandler} className='account-menu'/>}
+                </AccountNavSection>
             </StyledHeader>
             <Outlet/>
         </>
@@ -230,3 +304,8 @@ function Header() {
 }
 
 export default Header;
+//TRY TO MAKE A ON MOUSE OUT REACT HOOK. MAYBE THEN REPLACE WHEN CLICK OUTSIDE COMPONENT PACKAGE.
+//Add hover animations
+//Change the pointer on hover on clickable items //// DONE
+//Remove the spaces between menu buttons.
+//Add animations when opening menus

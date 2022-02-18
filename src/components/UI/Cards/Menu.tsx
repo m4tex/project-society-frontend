@@ -21,6 +21,10 @@ const Option = styled.p`
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     padding-bottom: 10px;
   }
+  
+  &:hover {
+    cursor: pointer;
+  }
 `
 
 interface MenuOption { name:string, click:()=>void }
