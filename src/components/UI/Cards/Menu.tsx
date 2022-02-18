@@ -9,7 +9,7 @@ const StyledMenuCard = styled(MenuCard)`
 `
 
 const Option = styled.p`
-  color: ${(props : {theme: Theme }) => props.theme.interactableColor};
+  color: ${(props : {theme: Theme }) => props.theme.secondaryColor};
   position: relative;
   display: inline-block;
   
@@ -24,6 +24,7 @@ const Option = styled.p`
   
   &:hover {
     cursor: pointer;
+    color: ${(props : {theme: Theme }) => props.theme.interactableColor};
   }
 `
 

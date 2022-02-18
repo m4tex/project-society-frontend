@@ -24,7 +24,7 @@ const StyledHeader = styled.header`
     font-family: 'Chivo', sans-serif;
     font-weight: bold;
   }
-  
+
   h1:hover {
     cursor: pointer;
   }
@@ -77,8 +77,16 @@ const AccountNavSection = styled.div`
     position: relative;
     right: -8px;
     transform: scale(120%);
+
+    p {
+      color: ${(props: { theme: Theme }) => props.theme.secondaryColor};
+    }
+
+    p:hover {
+      color: ${(props: { theme: Theme }) => props.theme.interactableColor};
+    }
   }
-  
+
   span {
     position: relative;
     line-height: 65px;
@@ -86,10 +94,10 @@ const AccountNavSection = styled.div`
     height: 100%;
   }
 
-  span:hover{
+  span:hover {
     cursor: pointer;
   }
-  
+
   span:first-child {
     color: ${(props: { theme: Theme }) => props.theme.secondaryColor};
     margin-right: 10px;
@@ -123,9 +131,10 @@ const NavLink = styled.p`
   line-height: 65px;
   padding: 0 20px;
   z-index: 100;
-  
+
   &:hover {
     cursor: pointer;
+    color: ${(props: { theme: Theme }) => props.theme.interactableColor};
   }
 `
 
@@ -137,11 +146,12 @@ const NavDropmenu = styled.div`
   padding: 0 10px 0 20px;
   line-height: 65px;
   z-index: 6;
-  
-  &:hover{
+
+  &:hover {
     cursor: pointer;
+    color: ${(props : {theme: Theme }) => props.theme.interactableColor};
   }
-  
+
   p {
     position: relative;
     float: left;
@@ -162,12 +172,14 @@ const NavDropmenu = styled.div`
     position: relative;
     width: 70px;
 
-    top: 5px;
+    top: 15px;
     left: -85px;
 
     border-radius: 18px;
     text-align: center;
+    transform: scale(120%);
 
+    font-weight: normal;
 
     p {
       font-size: 12px;
@@ -270,7 +282,7 @@ function Header() {
     return (
         <>
             <StyledHeader>
-                <h1 onClick={()=> nav('/home')}>Unitor
+                <h1 onClick={() => nav('/home')}>Unitor
                     <div className='logo-dot'/>
                 </h1>
                 <BetaBadge>Beta</BetaBadge>
@@ -295,7 +307,8 @@ function Header() {
                     <span className='material-icons'>notifications</span>
                     <AvatarCircle className='avatar' src='none'/>
                     <span className="material-icons" onClick={accountMenuHandler}>more_vert</span>
-                    {accountMenuShown && <Menu options={accountOptions} onClose={accountMenuHandler} className='account-menu'/>}
+                    {accountMenuShown &&
+                        <Menu options={accountOptions} onClose={accountMenuHandler} className='account-menu'/>}
                 </AccountNavSection>
             </StyledHeader>
             <Outlet/>
@@ -305,7 +318,7 @@ function Header() {
 
 export default Header;
 //TRY TO MAKE A ON MOUSE OUT REACT HOOK. MAYBE THEN REPLACE WHEN CLICK OUTSIDE COMPONENT PACKAGE.
-//Add hover animations
+//Add hover animations ///DONE
 //Change the pointer on hover on clickable items //// DONE
 //Remove the spaces between menu buttons.
 //Add animations when opening menus
