@@ -5,6 +5,7 @@ import Theme from "../../types/Theme";
 import Menu from "../UI/Cards/Menu";
 import AvatarCircle from "../UI/AvatarCircle";
 import {MainContext} from "../../store/MainProvider";
+import {Transition} from 'react-transition-group';
 
 const StyledHeader = styled.header`
   position: relative;
@@ -79,6 +80,10 @@ const AccountNavSection = styled.div`
     transform: scale(120%);
 
     p {
+      &:first-child {
+        padding-top: 10px;
+      }
+
       color: ${(props: { theme: Theme }) => props.theme.secondaryColor};
     }
 
@@ -149,7 +154,7 @@ const NavDropmenu = styled.div`
 
   &:hover {
     cursor: pointer;
-    color: ${(props : {theme: Theme }) => props.theme.interactableColor};
+    color: ${(props: { theme: Theme }) => props.theme.interactableColor};
   }
 
   p {
@@ -170,7 +175,7 @@ const NavDropmenu = styled.div`
   .tools-menu-list {
     cursor: default;
     position: relative;
-    width: 70px;
+    width: 90px;
 
     top: 15px;
     left: -85px;
@@ -209,6 +214,7 @@ function Header() {
 
     function navDropMenuHandler() {
         setDropdownShown(prevState => !prevState);
+        console.log('state changed.')
     }
 
     function accountMenuHandler() {
@@ -270,7 +276,7 @@ function Header() {
 
     const toolsOptions = [
         {name: 'Pomodoro', click: () => nav('/pomodoro')},
-        {name: 'Learn', click: () => nav('/learn')}
+        {name: 'Learn', click: () => nav('/learn')},
     ]
     const accountOptions = [
         {name: 'Account', click: () => nav('/account')},
@@ -278,6 +284,23 @@ function Header() {
         {name: 'About Us', click: () => nav('/about-us')},
         {name: 'Log Out', click: () => mainContext.logOut()},
     ]
+
+    type TransitionStates = {
+        [key: string]: string;
+    }
+
+    let toolsTransitionClasses: TransitionStates = {
+        entering: '',
+        entered: '',
+        exiting: '',
+        exited: ''
+    }
+    const accountMenuTransitionClasses: TransitionStates = {
+        entering: '',
+        entered: '',
+        exiting: '',
+        exited: ''
+    }
 
     return (
         <>
@@ -287,19 +310,16 @@ function Header() {
                 </h1>
                 <BetaBadge>Beta</BetaBadge>
                 <HeaderNavigation>
-                    <NavLink selected={navState.navLinkSelection[0]} ref={nav1}
-                             onClick={() => nav('/home')}>Home</NavLink>
-                    <NavLink selected={navState.navLinkSelection[1]} ref={nav2}
-                             onClick={() => nav('/')}>Schedule</NavLink>
-                    <NavLink selected={navState.navLinkSelection[2]} ref={nav3}
-                             onClick={() => nav('/classroom')}>Classroom</NavLink>
-                    <NavLink selected={navState.navLinkSelection[3]} ref={nav4}
-                             onClick={() => nav('/overview')}>Overview</NavLink>
+                    <NavLink selected={navState.navLinkSelection[0]} ref={nav1} onClick={() => nav('/home')}>Home</NavLink>
+                    <NavLink selected={navState.navLinkSelection[1]} ref={nav2} onClick={() => nav('/')}>Schedule</NavLink>
+                    <NavLink selected={navState.navLinkSelection[2]} ref={nav3} onClick={() => nav('/classroom')}>Classroom</NavLink>
+                    <NavLink selected={navState.navLinkSelection[3]} ref={nav4} onClick={() => nav('/overview')}>Overview</NavLink>
                     <NavDropmenu ref={nav5} selected={navState.navLinkSelection[4]} onClick={navDropMenuHandler}>
                         <p>Tools</p>
                         <span className="material-icons">expand_{dropdownShown ? 'less' : 'more'}</span>
-                        {dropdownShown &&
-                            <Menu className='tools-menu-list' options={toolsOptions} onClose={navDropMenuHandler}/>}
+                        <Transition timeout={200} in={dropdownShown} mountOnEnter unmountOnExit>
+                            { state => <Menu className={`tools-menu-list ${toolsTransitionClasses[state]}`} options={toolsOptions} onClose={navDropMenuHandler} /> }
+                        </Transition>
                     </NavDropmenu>
                     <NavIndicator left={navState.indicatorLeft} width={navState.indicatorWidth}/>
                 </HeaderNavigation>
@@ -307,8 +327,9 @@ function Header() {
                     <span className='material-icons'>notifications</span>
                     <AvatarCircle className='avatar' src='none'/>
                     <span className="material-icons" onClick={accountMenuHandler}>more_vert</span>
-                    {accountMenuShown &&
-                        <Menu options={accountOptions} onClose={accountMenuHandler} className='account-menu'/>}
+                    <Transition timeout={200} in={accountMenuShown} mountOnEnter={true} unmountOnExit={true}>
+                        {state => <Menu options={accountOptions} onClose={accountMenuHandler} className={`account-menu ${accountMenuTransitionClasses[state]}`} />}
+                    </Transition>
                 </AccountNavSection>
             </StyledHeader>
             <Outlet/>
@@ -317,8 +338,10 @@ function Header() {
 }
 
 export default Header;
-//TRY TO MAKE A ON MOUSE OUT REACT HOOK. MAYBE THEN REPLACE WHEN CLICK OUTSIDE COMPONENT PACKAGE.
-//Add hover animations ///DONE
+//TRY TO MAKE A ON MOUSE OUT REACT HOOK. MAYBE THEN REPLACE WHEN CLICK OUTSIDE COMPONENT PACKAGE. //// replaced the package with my own solution. The mouse out hook is not needed anymore. //// DONE
+//Add hover animations //// DONE
 //Change the pointer on hover on clickable items //// DONE
-//Remove the spaces between menu buttons.
+//Remove the spaces between menu buttons. //// DONE
 //Add animations when opening menus
+//Maybe add a gray indicator on hover
+//Give better names to the variables once everything is done..
