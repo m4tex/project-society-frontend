@@ -213,8 +213,10 @@ function Header() {
     })
 
     function navDropMenuHandler() {
-        setDropdownShown(prevState => !prevState);
-        console.log('state changed.')
+        setDropdownShown(prevState => {
+            console.log('state changed to: ' + !prevState);
+            return !prevState
+        });
     }
 
     function accountMenuHandler() {
@@ -317,6 +319,9 @@ function Header() {
                     <span className='material-icons'>notifications</span>
                     <AvatarCircle className='avatar' src='none'/>
                     <span className="material-icons" onClick={accountMenuHandler}>more_vert</span>
+                    <Menu timeout={399} classNames={'t'} trigger={accountMenuShown} options={accountOptions}
+                          className={'account-menu'} onClose={accountMenuHandler} />
+
                     {/*<Transition timeout={300} in={accountMenuShown} mountOnEnter={true} unmountOnExit={true}>*/}
                     {/*    {state => <Menu options={accountOptions} onClose={accountMenuHandler}*/}
                     {/*                    className={`account-menu t-${state}`}/>}*/}
