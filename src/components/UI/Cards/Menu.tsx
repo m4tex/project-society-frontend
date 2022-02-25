@@ -78,19 +78,16 @@ function Menu(props: {
 
     useEffect(() => {
         function handleClick(event: MouseEvent) {
-            if (props.trigger) {
-                // initialized.current = false;
+            // if (props.trigger) {
                 props.onClose();
-                return
-            }
+            // }
         }
 
-        //Timeout is used to prevent interference between this and Transition component.
-        document.addEventListener('click', handleClick)
+        document.addEventListener('click', handleClick);
 
-        return () => {
-            document.removeEventListener('click', handleClick);
-        }
+        // return () => {
+        //     document.removeEventListener('click', handleClick);
+        // }
     }, []);
 
     return (
