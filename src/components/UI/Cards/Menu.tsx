@@ -28,21 +28,14 @@ const StyledMenuCard = styled(MenuCard)`
     }
   }
 
-  .t-enter-active, .t-enter-done {
+  .t-enter-active {
     color: darkmagenta;
     opacity: 0.5;
-    //animation-duration: 500ms;
-    //animation-name: transition-anim;
-    //animation-play-state: running;
   }
 
-  .t-exit-active, t-exit-done {
+  .t-exit-active {
     color: aqua;
     opacity: .1;
-    //animation-name: transition-anim;
-    //animation-duration: 500ms;
-    //animation-direction: reverse;
-    //animation-play-state: running;
   }
 `;
 
@@ -76,22 +69,31 @@ interface MenuOption {
     click: () => void
 }
 
-function Menu(props: { timeout:number, classNames:string, trigger:boolean, options: MenuOption[], className: string, onClose: () => void }) {
+function Menu(props: { timeout: number, classNames: string, trigger: boolean,
+    options: MenuOption[], className: string, onClose: () => void }) {
+
     const ref = useRef<HTMLDivElement>(null);
-
-    function handleClick(event: MouseEvent) {
-        // @ts-ignore
-        if (ref.current === null || ref.current!.contains(event.target)) {
-            console.log('the click was in component')
-            return;
-        }
-        //Click outside the component
-
-        console.log('the click was outside the component.')
-        props.onClose();
-    }
+    const initialized = useRef<Boolean>(false);
 
     useEffect(() => {
+        function handleClick(event: MouseEvent) {
+            if(!initialized.current){
+                console.log('not initialized... changing that.');
+                initialized.current = true;
+                return;
+            }
+            // @ts-ignore
+            if (ref.current === null || ref.current!.contains(event.target)) {
+                console.log('the click was in component.')
+                return;
+            }
+            //Click outside the component
+
+            console.log('the click was outside the component.')
+            initialized.current = false;
+            props.onClose();
+        }
+
         //Timeout is used to prevent interference between this and Transition component.
         setTimeout(
             () => document.addEventListener('click', handleClick),

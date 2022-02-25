@@ -309,7 +309,7 @@ function Header() {
                         <p>Tools</p>
                         <span className="material-icons">expand_{dropdownShown ? 'less' : 'more'}</span>
                         <Menu timeout={300} classNames={'t'} trigger={dropdownShown} options={toolsOptions}
-                              className={'tools-menu-list'} onClose={navDropMenuHandler} />
+                              className={'tools-menu-list'} onClose={() => setDropdownShown(false)} />
                     </NavDropmenu>
                     <NavIndicator left={navState.indicatorLeft} width={navState.indicatorWidth}/>
                 </HeaderNavigation>
