@@ -5,7 +5,7 @@ import Theme from "../../types/Theme";
 import Menu from "../UI/Cards/Menu";
 import AvatarCircle from "../UI/AvatarCircle";
 import {MainContext} from "../../store/MainProvider";
-import {Transition} from 'react-transition-group';
+import {CSSTransition, Transition} from 'react-transition-group';
 
 const StyledHeader = styled.header`
   position: relative;
@@ -151,7 +151,7 @@ const NavDropmenu = styled.div`
   padding: 0 10px 0 20px;
   line-height: 65px;
   z-index: 6;
-
+  //max-width: 102px;
   &:hover {
     cursor: pointer;
     color: ${(props: { theme: Theme }) => props.theme.interactableColor};
@@ -174,11 +174,11 @@ const NavDropmenu = styled.div`
 
   .tools-menu-list {
     cursor: default;
-    position: relative;
+    position: absolute;
     width: 90px;
 
-    top: 15px;
-    left: -85px;
+    top: 14px;
+    left: 6px;
 
     border-radius: 18px;
     text-align: center;
@@ -190,10 +190,10 @@ const NavDropmenu = styled.div`
       font-size: 12px;
       line-height: normal;
 
-      position: inherit;
+      position: relative;
 
       &:first-child {
-        margin-top: 40px;
+        margin-top: 45px;
       }
     }
   }
@@ -289,19 +289,6 @@ function Header() {
         [key: string]: string;
     }
 
-    let toolsTransitionClasses: TransitionStates = {
-        entering: '',
-        entered: '',
-        exiting: '',
-        exited: ''
-    }
-    const accountMenuTransitionClasses: TransitionStates = {
-        entering: '',
-        entered: '',
-        exiting: '',
-        exited: ''
-    }
-
     return (
         <>
             <StyledHeader>
@@ -310,16 +297,19 @@ function Header() {
                 </h1>
                 <BetaBadge>Beta</BetaBadge>
                 <HeaderNavigation>
-                    <NavLink selected={navState.navLinkSelection[0]} ref={nav1} onClick={() => nav('/home')}>Home</NavLink>
-                    <NavLink selected={navState.navLinkSelection[1]} ref={nav2} onClick={() => nav('/')}>Schedule</NavLink>
-                    <NavLink selected={navState.navLinkSelection[2]} ref={nav3} onClick={() => nav('/classroom')}>Classroom</NavLink>
-                    <NavLink selected={navState.navLinkSelection[3]} ref={nav4} onClick={() => nav('/overview')}>Overview</NavLink>
+                    <NavLink selected={navState.navLinkSelection[0]} ref={nav1}
+                             onClick={() => nav('/home')}>Home</NavLink>
+                    <NavLink selected={navState.navLinkSelection[1]} ref={nav2}
+                             onClick={() => nav('/')}>Schedule</NavLink>
+                    <NavLink selected={navState.navLinkSelection[2]} ref={nav3}
+                             onClick={() => nav('/classroom')}>Classroom</NavLink>
+                    <NavLink selected={navState.navLinkSelection[3]} ref={nav4}
+                             onClick={() => nav('/overview')}>Overview</NavLink>
                     <NavDropmenu ref={nav5} selected={navState.navLinkSelection[4]} onClick={navDropMenuHandler}>
                         <p>Tools</p>
                         <span className="material-icons">expand_{dropdownShown ? 'less' : 'more'}</span>
-                        <Transition timeout={200} in={dropdownShown} mountOnEnter unmountOnExit>
-                            { state => <Menu className={`tools-menu-list ${toolsTransitionClasses[state]}`} options={toolsOptions} onClose={navDropMenuHandler} /> }
-                        </Transition>
+                        <Menu timeout={300} classNames={'t'} trigger={dropdownShown} options={toolsOptions}
+                              className={'tools-menu-list'} onClose={navDropMenuHandler} />
                     </NavDropmenu>
                     <NavIndicator left={navState.indicatorLeft} width={navState.indicatorWidth}/>
                 </HeaderNavigation>
@@ -327,14 +317,15 @@ function Header() {
                     <span className='material-icons'>notifications</span>
                     <AvatarCircle className='avatar' src='none'/>
                     <span className="material-icons" onClick={accountMenuHandler}>more_vert</span>
-                    <Transition timeout={200} in={accountMenuShown} mountOnEnter={true} unmountOnExit={true}>
-                        {state => <Menu options={accountOptions} onClose={accountMenuHandler} className={`account-menu ${accountMenuTransitionClasses[state]}`} />}
-                    </Transition>
+                    {/*<Transition timeout={300} in={accountMenuShown} mountOnEnter={true} unmountOnExit={true}>*/}
+                    {/*    {state => <Menu options={accountOptions} onClose={accountMenuHandler}*/}
+                    {/*                    className={`account-menu t-${state}`}/>}*/}
+                    {/*</Transition>*/}
                 </AccountNavSection>
             </StyledHeader>
             <Outlet/>
         </>
-    );
+);
 }
 
 export default Header;

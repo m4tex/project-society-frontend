@@ -15,5 +15,13 @@ body {
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  monospace;
+}
+
+.menu-transition-enter-active{
+  color: palevioletred;
+}
+
+.menu-transition-exit-active{
+  color: darkred;
 }
