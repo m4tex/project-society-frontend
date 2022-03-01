@@ -5,7 +5,6 @@ import Theme from "../../types/Theme";
 import Menu from "../UI/Cards/Menu";
 import AvatarCircle from "../UI/AvatarCircle";
 import {MainContext} from "../../store/MainProvider";
-import {CSSTransition, Transition} from 'react-transition-group';
 
 const StyledHeader = styled.header`
   position: relative;
@@ -210,17 +209,18 @@ function Header() {
         navLinkSelection: [false, true, false, false, false],
         indicatorLeft: 0,
         indicatorWidth: 0,
-    })
+    });
 
     function navDropMenuHandler() {
         setDropdownShown(prevState => {
-            console.log('state changed to: ' + !prevState);
+            console.log(!prevState);
             return !prevState
-        });
+            }
+        );
     }
 
     function accountMenuHandler() {
-        setAccountMenuShown(prevState => !prevState)
+        setAccountMenuShown(prevState => !prevState);
     }
 
     const mainContext = useContext(MainContext);
@@ -310,8 +310,8 @@ function Header() {
                     <NavDropmenu ref={nav5} selected={navState.navLinkSelection[4]} onClick={navDropMenuHandler}>
                         <p>Tools</p>
                         <span className="material-icons">expand_{dropdownShown ? 'less' : 'more'}</span>
-                        <Menu timeout={300} classNames={'t'} trigger={dropdownShown} options={toolsOptions}
-                              className={'tools-menu-list'} onClose={navDropMenuHandler} />
+                        <Menu trigger={dropdownShown} options={toolsOptions}
+                              className={'tools-menu-list'} onClose={() => setDropdownShown(false)} />
                     </NavDropmenu>
                     <NavIndicator left={navState.indicatorLeft} width={navState.indicatorWidth}/>
                 </HeaderNavigation>
@@ -319,13 +319,8 @@ function Header() {
                     <span className='material-icons'>notifications</span>
                     <AvatarCircle className='avatar' src='none'/>
                     <span className="material-icons" onClick={accountMenuHandler}>more_vert</span>
-                    <Menu timeout={399} classNames={'t'} trigger={accountMenuShown} options={accountOptions}
+                    <Menu trigger={accountMenuShown} options={accountOptions}
                           className={'account-menu'} onClose={accountMenuHandler} />
-
-                    {/*<Transition timeout={300} in={accountMenuShown} mountOnEnter={true} unmountOnExit={true}>*/}
-                    {/*    {state => <Menu options={accountOptions} onClose={accountMenuHandler}*/}
-                    {/*                    className={`account-menu t-${state}`}/>}*/}
-                    {/*</Transition>*/}
                 </AccountNavSection>
             </StyledHeader>
             <Outlet/>
@@ -341,3 +336,4 @@ export default Header;
 //Add animations when opening menus
 //Maybe add a gray indicator on hover
 //Give better names to the variables once everything is done..
+//Split into components... please... do that...

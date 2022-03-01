@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Theme from '../../../types/Theme';
 import MenuCard from "./MenuCard";
 import {useRef, useEffect} from "react";
-import {CSSTransition} from "react-transition-group";
+import {animated, useTransition} from "react-spring";
 
 const StyledMenuCard = styled(MenuCard)`
   display: flex;
@@ -69,35 +69,37 @@ interface MenuOption {
     click: () => void
 }
 
-function Menu(props: {
-    timeout: number, classNames: string, trigger: boolean,
-    options: MenuOption[], className: string, onClose: () => void
-}) {
+function Menu(props: { trigger: boolean, options: MenuOption[], className: string, onClose: () => void }) {
+    const transition = useTransition(props.trigger, {
+        from: {opacity: 0},
+        enter: {opacity: 1},
+        leave: {opacity: 0}
+    })
 
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         function handleClick(event: MouseEvent) {
-            // if (props.trigger) {
+            console.log(props.trigger)
+            // @ts-ignore
+            if(props.trigger && ref.current && !ref.current.contains(event.target)){
                 props.onClose();
-            // }
+            }
         }
 
-        document.addEventListener('click', handleClick);
+        document.addEventListener('mousedown', handleClick);
 
-        // return () => {
-        //     document.removeEventListener('click', handleClick);
-        // }
-    }, []);
+        return () => {
+            document.removeEventListener('mousedown', handleClick);
+        }
+    }, [props.trigger]);
 
-    return (
-        <CSSTransition in={props.trigger} classNames={props.classNames} timeout={props.timeout} mountOnEnter
-                       unmountOnExit>
-            <StyledMenuCard className={props.className} ref={ref}>
-                {props.options.map(option => <Option key={Math.random()} onClick={option.click}>{option.name}</Option>)}
-            </StyledMenuCard>
-        </CSSTransition>
-    );
+    return transition((style, item) => item ?
+        <StyledMenuCard as={animated.div} className={props.className} style={style} ref={ref}>
+            {props.options.map(option => <Option key={Math.random()} onClick={option.click}>{option.name}</Option>)}
+        </StyledMenuCard>
+        : null
+    )
 }
 
 export default Menu;
