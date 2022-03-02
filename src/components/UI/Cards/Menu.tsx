@@ -69,21 +69,31 @@ interface MenuOption {
     click: () => void
 }
 
-function Menu(props: { trigger: boolean, options: MenuOption[], className: string, onClose: () => void }) {
+function Menu(props: { trigger: boolean, options: MenuOption[], className: string, onClose: () => void, parent?: React.RefObject<HTMLDivElement> }) {
     const transition = useTransition(props.trigger, {
         from: {opacity: 0},
         enter: {opacity: 1},
-        leave: {opacity: 0}
-    })
+        leave: {opacity: 0},
+        config: {duration: 100}
+    });
 
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         function handleClick(event: MouseEvent) {
-            console.log(props.trigger)
-            // @ts-ignore
-            if(props.trigger && ref.current && !ref.current.contains(event.target)){
-                props.onClose();
+            if (props.trigger && ref.current) {
+                if (props.parent?.current) {
+                    // @ts-ignore
+                    if (!props.parent.current.contains(event.target)) {
+                        console.log('ignore exists..');
+                        props.onClose();
+                    }
+                } else
+                    // @ts-ignore
+                if (!ref.current.contains(event.target)) {
+                    console.log('on close');
+                    props.onClose();
+                }
             }
         }
 

@@ -212,11 +212,8 @@ function Header() {
     });
 
     function navDropMenuHandler() {
-        setDropdownShown(prevState => {
-            console.log(!prevState);
-            return !prevState
-            }
-        );
+        console.log('menu handler');
+        setDropdownShown(prevState => !prevState);
     }
 
     function accountMenuHandler() {
@@ -310,8 +307,8 @@ function Header() {
                     <NavDropmenu ref={nav5} selected={navState.navLinkSelection[4]} onClick={navDropMenuHandler}>
                         <p>Tools</p>
                         <span className="material-icons">expand_{dropdownShown ? 'less' : 'more'}</span>
-                        <Menu trigger={dropdownShown} options={toolsOptions}
-                              className={'tools-menu-list'} onClose={() => setDropdownShown(false)} />
+                        <Menu trigger={dropdownShown} options={toolsOptions} className={'tools-menu-list'}
+                              onClose={() => setDropdownShown(false)} parent={nav5}/>
                     </NavDropmenu>
                     <NavIndicator left={navState.indicatorLeft} width={navState.indicatorWidth}/>
                 </HeaderNavigation>
