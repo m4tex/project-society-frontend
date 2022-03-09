@@ -1,42 +1,13 @@
 import styled from 'styled-components';
 import Theme from '../../../types/Theme';
 import MenuCard from "./MenuCard";
-import {useRef, useEffect} from "react";
-import {animated, useTransition} from "react-spring";
+import React, {useRef, useEffect} from "react";
+import {animated, useTransition } from "react-spring";
+import useResizeAware from 'react-resize-aware';
 
 const StyledMenuCard = styled(MenuCard)`
   display: flex;
   flex-direction: column;
-
-  @keyframes transition-anim {
-    0% {
-      width: 0;
-      height: 0;
-
-      p {
-        opacity: 0;
-      }
-    }
-    50% {
-      width: auto;
-      height: auto;
-    }
-    100% {
-      p {
-        opacity: 1;
-      }
-    }
-  }
-
-  .t-enter-active {
-    color: darkmagenta;
-    opacity: 0.5;
-  }
-
-  .t-exit-active {
-    color: aqua;
-    opacity: .1;
-  }
 `;
 
 const Option = styled.p`
@@ -69,16 +40,19 @@ interface MenuOption {
     click: () => void
 }
 
-function Menu(props: { trigger: boolean, options: MenuOption[], className: string, onClose: () => void, parent?: React.RefObject<HTMLDivElement> }) {
+function Menu(props: { trigger: boolean, options: MenuOption[], className: string, onClose: () => void,
+    parent?: React.RefObject<HTMLDivElement>, h:number}) {
+
     const transition = useTransition(props.trigger, {
-        from: {opacity: 0},
-        enter: {opacity: 1},
+        from: {height: 0, opacity: 0},
+        enter: {height: props.h, opacity:1},
         leave: {opacity: 0},
         config: {duration: 100}
     });
 
     const ref = useRef<HTMLDivElement>(null);
 
+    //Detecting when the user clicks outside of the component
     useEffect(() => {
         function handleClick(event: MouseEvent) {
             if (props.trigger && ref.current) {
@@ -106,7 +80,7 @@ function Menu(props: { trigger: boolean, options: MenuOption[], className: strin
 
     return transition((style, item) => item ?
         <StyledMenuCard as={animated.div} className={props.className} style={style} ref={ref}>
-            {props.options.map(option => <Option key={Math.random()} onClick={option.click}>{option.name}</Option>)}
+            {props.options.map((option, index) => <Option key={'option'+index} onClick={option.click}>{option.name}</Option>)}
         </StyledMenuCard>
         : null
     )

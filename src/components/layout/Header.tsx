@@ -92,6 +92,7 @@ const AccountNavSection = styled.div`
   }
 
   span {
+    pointer-events: ${(props: {theme: Theme, menuShown: boolean}) => props.menuShown ? 'none' : 'auto'};
     position: relative;
     line-height: 65px;
     top: -17.5px;
@@ -212,7 +213,6 @@ function Header() {
     });
 
     function navDropMenuHandler() {
-        console.log('menu handler');
         setDropdownShown(prevState => !prevState);
     }
 
@@ -306,18 +306,18 @@ function Header() {
                              onClick={() => nav('/overview')}>Overview</NavLink>
                     <NavDropmenu ref={nav5} selected={navState.navLinkSelection[4]} onClick={navDropMenuHandler}>
                         <p>Tools</p>
-                        <span className="material-icons">expand_{dropdownShown ? 'less' : 'more'}</span>
+                        <span className="material-icons">expand_{dropdownShown ? 'more' : 'less'}</span>
                         <Menu trigger={dropdownShown} options={toolsOptions} className={'tools-menu-list'}
-                              onClose={() => setDropdownShown(false)} parent={nav5}/>
+                              onClose={() => setDropdownShown(false)} parent={nav5} h={110}/>
                     </NavDropmenu>
                     <NavIndicator left={navState.indicatorLeft} width={navState.indicatorWidth}/>
                 </HeaderNavigation>
-                <AccountNavSection>
+                <AccountNavSection menuShown={accountMenuShown}>
                     <span className='material-icons'>notifications</span>
                     <AvatarCircle className='avatar' src='none'/>
                     <span className="material-icons" onClick={accountMenuHandler}>more_vert</span>
                     <Menu trigger={accountMenuShown} options={accountOptions}
-                          className={'account-menu'} onClose={accountMenuHandler} />
+                          className={'account-menu'} onClose={accountMenuHandler} h={170} />
                 </AccountNavSection>
             </StyledHeader>
             <Outlet/>
@@ -330,7 +330,7 @@ export default Header;
 //Add hover animations //// DONE
 //Change the pointer on hover on clickable items //// DONE
 //Remove the spaces between menu buttons. //// DONE
-//Add animations when opening menus
+//Add animations when opening menus //// DONE
 //Maybe add a gray indicator on hover
 //Give better names to the variables once everything is done..
 //Split into components... please... do that...
