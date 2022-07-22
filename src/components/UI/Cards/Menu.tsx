@@ -10,12 +10,15 @@ const StyledMenuCard = styled(MenuCard)`
 `;
 
 const Option = styled.p`
-  color: ${(props: { theme: Theme }) => props.theme.secondaryColor};
   position: relative;
   display: inline-block;
+  padding: 10px .8em;
+  
   text-align: center;
+  font-size: 14px;
+  white-space: nowrap;
 
-  padding: 10px 0;
+  color: ${(props: { theme: Theme }) => props.theme.secondaryColor};
 
   &:hover {
     cursor: pointer;

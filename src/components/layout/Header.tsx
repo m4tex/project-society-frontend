@@ -1,4 +1,4 @@
-import {Outlet, useNavigate, useLocation} from "react-router-dom";
+import {useNavigate, useLocation} from "react-router-dom";
 import {useRef, useEffect, useState, useContext} from "react";
 import styled from "styled-components";
 import Theme from "../../types/Theme";
@@ -7,39 +7,52 @@ import AvatarCircle from "../UI/AvatarCircle";
 import {MainContext} from "../../store/MainProvider";
 
 const StyledHeader = styled.header`
-  position: relative;
+  position: fixed;
   display: flex;
-  gap: 20px;
-  justify-items: center;
-  background-color: ${(props: { theme: Theme }) => props.theme.primaryColor};
+
   height: 65px;
-  padding-left: 40px;
-  border-bottom: 1px solid ${(props: { theme: Theme }) => props.theme.tertiaryColor};
+  width: 100%;
+
+  padding-left: 30px;
+  padding-right: 10px;
   z-index: 4;
 
+  background-color: ${(props: { theme: Theme }) => props.theme.primaryColor};
+  border-bottom: 1px solid ${(props: { theme: Theme }) => props.theme.tertiaryColor};
+
+  //logo
   h1 {
-    display: inline;
+    display: flex;
+    align-items: center;
     font-size: 30px;
-    margin: auto 0;
     font-family: 'Chivo', sans-serif;
     font-weight: bold;
+    
+    &:hover {
+      cursor: pointer;
+    }
   }
-
-  h1:hover {
-    cursor: pointer;
+  
+  .interact {
+    color: ${(props: { theme: Theme }) => props.theme.secondaryColor };
+    &:hover {
+      cursor: pointer;
+      color: ${(props: { theme: Theme }) => props.theme.interactableColor };
+    }
   }
+`
 
-  .logo-dot {
-    position: absolute;
-    display: inline;
+const LogoDot = styled.div`
+  position: relative;
+  display: block;
 
-    width: 6px;
-    height: 6px;
-    bottom: 22px;
+  top: 36px;
 
-    background-color: ${(props: { theme: Theme }) => props.theme.accentColor};
-    border-radius: 50%;
-  }
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+  background-color: ${(props: { theme: Theme }) => props.theme.accentColor};
 `
 
 const BetaBadge = styled.div`
@@ -47,62 +60,40 @@ const BetaBadge = styled.div`
   font-weight: 700;
 
   color: ${(props: { theme: Theme }) => props.theme.accentColor};
-  background-color: transparent;
-
   border: 1px solid ${(props: { theme: Theme }) => props.theme.accentColor};
+
   border-radius: 8px;
 
-  margin: auto 0;
-  height: 14px;
+  margin: auto 20px;
   padding: 2px 10px;
 `
 
+const HeaderNavigation = styled.nav`
+  display: flex;
+  font-weight: bold;
+  font-size: 18px;
+`
+
 const AccountNavSection = styled.div`
-  position: absolute;
-  right: 0;
-  height: 100%;
-
-  margin-right: 20px;
-
+  position: relative;
+  margin-left: auto;
+  
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  
   .material-icons {
     font-size: 30px;
   }
 
-  .avatar {
-    display: inline-block;
-    margin: 12.5px 0;
-  }
-
   .account-menu {
-    position: relative;
-    right: -19px;
-    top: -24px;
-    transform: scale(120%);
-
+    position: absolute;
+    top: 56px;
+    left: 3px;
+    
     p {
-      color: ${(props: { theme: Theme }) => props.theme.secondaryColor};
+      font-size: 18px;
     }
-
-    p:hover {
-      color: ${(props: { theme: Theme }) => props.theme.interactableColor};
-    }
-  }
-
-  span {
-    position: relative;
-    line-height: 65px;
-    top: -17.5px;
-    height: 100%;
-  }
-
-  span:hover {
-    cursor: pointer;
-    color: ${(props: { theme: Theme }) => props.theme.interactableColor};
-  }
-
-  span:first-child {
-    color: ${(props: { theme: Theme }) => props.theme.secondaryColor};
-    margin-right: 10px;
   }
 `
 
@@ -119,78 +110,42 @@ const NavIndicator = styled.div`
   transition: left 0.3s ease-out, width 0.3s ease-in;
 `
 
-const HeaderNavigation = styled.nav`
-  font-weight: bold;
-  font-size: 18px;
-  margin-left: 20px;
-  position: relative;
-`
-
 const NavLink = styled.p`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
   color: ${(props: { theme: Theme, selected: boolean }) => props.selected ? props.theme.interactableColor : props.theme.secondaryColor};
-  float: left;
+
   height: 100%;
-  line-height: 65px;
   padding: 0 20px;
-  z-index: 100;
+  z-index: 6;
 
   &:hover {
     cursor: pointer;
     color: ${(props: { theme: Theme }) => props.theme.interactableColor};
-    //background-color: #f7f7f7;
   }
 `
 
 const NavDropmenu = styled.div`
-  color: ${(props: { theme: Theme, selected: boolean }) => props.selected ? props.theme.interactableColor : props.theme.secondaryColor};
   position: relative;
-  height: 100%;
-  float: left;
+  display: flex;
+  align-items: center;
   padding: 0 10px 0 20px;
-  line-height: 65px;
+
+  color: ${(props: { theme: Theme, selected: boolean }) => props.selected ? props.theme.interactableColor : props.theme.secondaryColor} !important;
   z-index: 6;
-  //max-width: 102px;
-  &:hover {
-    cursor: pointer;
-    color: ${(props: { theme: Theme }) => props.theme.interactableColor};
-  }
-
-  p {
-    position: relative;
-    float: left;
-    z-index: 10;
-  }
-
-  span {
-    position: relative;
-    float: left;
-    height: 100%;
-    line-height: inherit;
-    transform: translateY(-1px);
-    z-index: inherit;
-  }
 
   .tools-menu-list {
-    cursor: default;
     position: absolute;
-    width: 90px;
-
+    z-index: 10;
+    
     top: 50px;
-    left: 6px;
+    left: 2.5px;
     
-    transform: scale(150%);
-    
-    text-align: center;
-
-    font-weight: normal;
-
     p {
-      font-size: 12px;
-      line-height: normal;
-
-      position: relative;
+      font-weight: normal;
     }
-    
   }
 `
 
@@ -272,45 +227,37 @@ function Header() {
         {name: 'Log Out', click: () => mainContext.logOut()},
     ]
 
-    type TransitionStates = {
-        [key: string]: string;
-    }
-
     return (
-        <>
-            <StyledHeader>
-                <h1 onClick={() => nav('/home')}>Unitor
-                    <div className='logo-dot'/>
-                </h1>
-                <BetaBadge>Beta</BetaBadge>
-                <HeaderNavigation>
-                    <NavLink selected={navState.navLinkSelection[0]} ref={nav1}
-                             onClick={() => nav('/home')}>Home</NavLink>
-                    <NavLink selected={navState.navLinkSelection[1]} ref={nav2}
-                             onClick={() => nav('/')}>Schedule</NavLink>
-                    <NavLink selected={navState.navLinkSelection[2]} ref={nav3}
-                             onClick={() => nav('/classroom')}>Classroom</NavLink>
-                    <NavLink selected={navState.navLinkSelection[3]} ref={nav4}
-                             onClick={() => nav('/overview')}>Overview</NavLink>
-                    <NavDropmenu ref={nav5} selected={navState.navLinkSelection[4]} onClick={() => setDropdownShown(true)}>
-                        <p>Tools</p>
-                        <span className="material-icons">expand_{dropdownShown ? 'less' : 'more'}</span>
-                        <Menu isOpen={dropdownShown} options={toolsOptions} className={'tools-menu-list'}
-                              onClose={() => setDropdownShown(false)} />
-                    </NavDropmenu>
-                    <NavIndicator left={navState.indicatorLeft} width={navState.indicatorWidth}/>
-                </HeaderNavigation>
-                <AccountNavSection>
-                    <span className='material-icons'>notifications</span>
-                    <AvatarCircle className='avatar' src='none'/>
-                    <span className='material-icons' onClick={() => setAccountMenuShown(true)}>more_vert</span>
-                    <Menu isOpen={accountMenuShown} options={accountOptions}
-                          className={'account-menu'} onClose={() => setAccountMenuShown(false)} />
-                </AccountNavSection>
-            </StyledHeader>
-            <Outlet/>
-        </>
-);
+        <StyledHeader>
+            <h1 onClick={() => nav('/home')}>Unitor</h1>
+            <LogoDot />
+            <BetaBadge>Beta</BetaBadge>
+            <HeaderNavigation>
+                <NavLink selected={navState.navLinkSelection[0]} ref={nav1}
+                         onClick={() => nav('/home')}>Home</NavLink>
+                <NavLink selected={navState.navLinkSelection[1]} ref={nav2}
+                         onClick={() => nav('/')}>Schedule</NavLink>
+                <NavLink selected={navState.navLinkSelection[2]} ref={nav3}
+                         onClick={() => nav('/classroom')}>Classroom</NavLink>
+                <NavLink selected={navState.navLinkSelection[3]} ref={nav4}
+                         onClick={() => nav('/overview')}>Overview</NavLink>
+                <NavDropmenu ref={nav5} selected={navState.navLinkSelection[4]} onClick={() => setDropdownShown(true)} className={'interact'}>
+                    <p>Tools</p>
+                    <span className="material-icons">expand_{dropdownShown ? 'less' : 'more'}</span>
+                    <Menu isOpen={dropdownShown} options={toolsOptions} className={'tools-menu-list'}
+                          onClose={() => setDropdownShown(false)}/>
+                </NavDropmenu>
+                <NavIndicator left={navState.indicatorLeft} width={navState.indicatorWidth}/>
+            </HeaderNavigation>
+            <AccountNavSection>
+                <span className='material-icons interact'>notifications</span>
+                <AvatarCircle className='avatar' src='none'/>
+                <span className='material-icons interact' onClick={() => setAccountMenuShown(true)}>more_vert</span>
+                <Menu isOpen={accountMenuShown} options={accountOptions}
+                      className={'account-menu'} onClose={() => setAccountMenuShown(false)}/>
+            </AccountNavSection>
+        </StyledHeader>
+    );
 }
 
 export default Header;
@@ -320,5 +267,6 @@ export default Header;
 //Remove the spaces between menu buttons. //// DONE
 //Add animations when opening menus //// DONE
 //Maybe add a gray indicator on hover
-//Give better names to the variables once everything is done..
+//Give better names to the variables once everything is done...
 //Split into components... please... do that...
+//Add indicator position update
