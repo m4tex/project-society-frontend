@@ -12,6 +12,11 @@ import PomodoroPage from "./pages/tools-pages/PomodoroPage";
 import LearnPage from "./pages/tools-pages/LearnPage";
 
 const BackgroundThemeStyle = createGlobalStyle`
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
   body {
     background-color: ${(props: { theme: Theme }) => props.theme.backgroundColor};
   }

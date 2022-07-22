@@ -8,10 +8,10 @@ const data = {
 }
 
 const lightModeColors = [
-    '#EDEDED',
+    '#FFFFFF',
     '#FFFFFF',
     '#6F6F6F',
-    '#EEEEEE',
+    '#DEDEDE',
     '#000000',
     '#4F46E5',
     '#FB0000'

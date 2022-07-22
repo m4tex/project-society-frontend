@@ -14,7 +14,7 @@ const StyledHeader = styled.header`
   background-color: ${(props: { theme: Theme }) => props.theme.primaryColor};
   height: 65px;
   padding-left: 40px;
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid ${(props: { theme: Theme }) => props.theme.tertiaryColor};
   z-index: 4;
 
   h1 {
@@ -53,7 +53,7 @@ const BetaBadge = styled.div`
   border-radius: 8px;
 
   margin: auto 0;
-  height: 8px;
+  height: 14px;
   padding: 2px 10px;
 `
 
@@ -75,14 +75,11 @@ const AccountNavSection = styled.div`
 
   .account-menu {
     position: relative;
-    right: -8px;
+    right: -19px;
+    top: -24px;
     transform: scale(120%);
 
     p {
-      &:first-child {
-        padding-top: 10px;
-      }
-
       color: ${(props: { theme: Theme }) => props.theme.secondaryColor};
     }
 
@@ -92,7 +89,6 @@ const AccountNavSection = styled.div`
   }
 
   span {
-    pointer-events: ${(props: {theme: Theme, menuShown: boolean}) => props.menuShown ? 'none' : 'auto'};
     position: relative;
     line-height: 65px;
     top: -17.5px;
@@ -101,6 +97,7 @@ const AccountNavSection = styled.div`
 
   span:hover {
     cursor: pointer;
+    color: ${(props: { theme: Theme }) => props.theme.interactableColor};
   }
 
   span:first-child {
@@ -140,6 +137,7 @@ const NavLink = styled.p`
   &:hover {
     cursor: pointer;
     color: ${(props: { theme: Theme }) => props.theme.interactableColor};
+    //background-color: #f7f7f7;
   }
 `
 
@@ -177,12 +175,12 @@ const NavDropmenu = styled.div`
     position: absolute;
     width: 90px;
 
-    top: 14px;
+    top: 50px;
     left: 6px;
-
-    border-radius: 18px;
+    
+    transform: scale(150%);
+    
     text-align: center;
-    transform: scale(120%);
 
     font-weight: normal;
 
@@ -191,11 +189,8 @@ const NavDropmenu = styled.div`
       line-height: normal;
 
       position: relative;
-
-      &:first-child {
-        margin-top: 45px;
-      }
     }
+    
   }
 `
 
@@ -212,15 +207,8 @@ function Header() {
         indicatorWidth: 0,
     });
 
-    function navDropMenuHandler() {
-        setDropdownShown(prevState => !prevState);
-    }
-
-    function accountMenuHandler() {
-        setAccountMenuShown(prevState => !prevState);
-    }
-
     const mainContext = useContext(MainContext);
+
     //endregion
     //region navigation selection variables
     const nav = useNavigate();
@@ -304,20 +292,20 @@ function Header() {
                              onClick={() => nav('/classroom')}>Classroom</NavLink>
                     <NavLink selected={navState.navLinkSelection[3]} ref={nav4}
                              onClick={() => nav('/overview')}>Overview</NavLink>
-                    <NavDropmenu ref={nav5} selected={navState.navLinkSelection[4]} onClick={navDropMenuHandler}>
+                    <NavDropmenu ref={nav5} selected={navState.navLinkSelection[4]} onClick={() => setDropdownShown(true)}>
                         <p>Tools</p>
-                        <span className="material-icons">expand_{dropdownShown ? 'more' : 'less'}</span>
-                        <Menu trigger={dropdownShown} options={toolsOptions} className={'tools-menu-list'}
-                              onClose={() => setDropdownShown(false)} parent={nav5} h={110}/>
+                        <span className="material-icons">expand_{dropdownShown ? 'less' : 'more'}</span>
+                        <Menu isOpen={dropdownShown} options={toolsOptions} className={'tools-menu-list'}
+                              onClose={() => setDropdownShown(false)} />
                     </NavDropmenu>
                     <NavIndicator left={navState.indicatorLeft} width={navState.indicatorWidth}/>
                 </HeaderNavigation>
-                <AccountNavSection menuShown={accountMenuShown}>
+                <AccountNavSection>
                     <span className='material-icons'>notifications</span>
                     <AvatarCircle className='avatar' src='none'/>
-                    <span className="material-icons" onClick={accountMenuHandler}>more_vert</span>
-                    <Menu trigger={accountMenuShown} options={accountOptions}
-                          className={'account-menu'} onClose={accountMenuHandler} h={170} />
+                    <span className='material-icons' onClick={() => setAccountMenuShown(true)}>more_vert</span>
+                    <Menu isOpen={accountMenuShown} options={accountOptions}
+                          className={'account-menu'} onClose={() => setAccountMenuShown(false)} />
                 </AccountNavSection>
             </StyledHeader>
             <Outlet/>
