@@ -23,6 +23,16 @@ const Option = styled.p`
   &:hover {
     cursor: pointer;
     color: ${(props: { theme: Theme }) => props.theme.interactableColor};
+    
+    &:first-child {
+      border-radius: 9px 9px 0 0;
+    }
+    
+    &:last-child {
+      border-radius: 0 0 9px 9px;
+    }
+    
+    background-color: rgba(0, 0, 0, 0.05);
   }
 `;
 

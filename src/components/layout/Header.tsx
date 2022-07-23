@@ -64,7 +64,8 @@ const BetaBadge = styled.div`
 
   border-radius: 8px;
 
-  margin: auto 20px;
+  height: fit-content;
+  margin: 25px 20px 0 10px;
   padding: 2px 10px;
 `
 
@@ -84,6 +85,11 @@ const AccountNavSection = styled.div`
   
   .material-icons {
     font-size: 30px;
+  }
+  
+  .material-symbols-rounded {
+    font-size: 32px;
+    margin-right: 12px;
   }
 
   .account-menu {
@@ -136,6 +142,12 @@ const NavDropmenu = styled.div`
   color: ${(props: { theme: Theme, selected: boolean }) => props.selected ? props.theme.interactableColor : props.theme.secondaryColor} !important;
   z-index: 6;
 
+  &:hover {
+    p, span {
+      color: ${(props: { theme: Theme }) => props.theme.interactableColor};
+    }
+  }
+  
   .tools-menu-list {
     position: absolute;
     z-index: 10;
@@ -241,7 +253,7 @@ function Header() {
                          onClick={() => nav('/classroom')}>Classroom</NavLink>
                 <NavLink selected={navState.navLinkSelection[3]} ref={nav4}
                          onClick={() => nav('/overview')}>Overview</NavLink>
-                <NavDropmenu ref={nav5} selected={navState.navLinkSelection[4]} onClick={() => setDropdownShown(true)} className={'interact'}>
+                <NavDropmenu ref={nav5} selected={navState.navLinkSelection[4]} onClick={() => setDropdownShown(true)}>
                     <p>Tools</p>
                     <span className="material-icons">expand_{dropdownShown ? 'less' : 'more'}</span>
                     <Menu isOpen={dropdownShown} options={toolsOptions} className={'tools-menu-list'}
@@ -250,7 +262,7 @@ function Header() {
                 <NavIndicator left={navState.indicatorLeft} width={navState.indicatorWidth}/>
             </HeaderNavigation>
             <AccountNavSection>
-                <span className='material-icons interact'>notifications</span>
+                <span className='material-symbols-rounded interact'>notifications</span>
                 <AvatarCircle className='avatar' src='none'/>
                 <span className='material-icons interact' onClick={() => setAccountMenuShown(true)}>more_vert</span>
                 <Menu isOpen={accountMenuShown} options={accountOptions}
@@ -270,3 +282,4 @@ export default Header;
 //Give better names to the variables once everything is done...
 //Split into components... please... do that...
 //Add indicator position update
+//Fix tool menu highlighting
