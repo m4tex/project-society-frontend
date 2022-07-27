@@ -12,6 +12,8 @@ const StyledHeader = styled.header`
 
   height: 65px;
   width: 100%;
+  
+  top: 0;
 
   padding-left: 30px;
   padding-right: 10px;

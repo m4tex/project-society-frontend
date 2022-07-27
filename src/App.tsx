@@ -3,13 +3,13 @@ import Theme from "./types/Theme";
 import {createGlobalStyle} from "styled-components";
 
 import {Routes, Route} from "react-router-dom";
-import Header from './components/layout/Header'
 import SchedulePage from "./pages/SchedulePage";
 import HomePage from "./pages/HomePage";
 import ClassroomPage from "./pages/ClassroomPage";
 import OverviewPage from "./pages/OverviewPage";
 import PomodoroPage from "./pages/tools-pages/PomodoroPage";
 import LearnPage from "./pages/tools-pages/LearnPage";
+import Layout from "./components/layout/Layout";
 
 const BackgroundThemeStyle = createGlobalStyle`
   * {
@@ -27,7 +27,7 @@ function App() {
         <ThemeProvider>
             <BackgroundThemeStyle/>
             <Routes>
-                <Route path='/' element={<Header/>}>
+                <Route path='/' element={<Layout />}>
                     <Route index element={<SchedulePage/>}/>
                     <Route path='home' element={<HomePage />}/>
                     <Route path='classroom' element={<ClassroomPage />}/>
