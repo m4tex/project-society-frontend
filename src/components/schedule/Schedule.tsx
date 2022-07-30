@@ -4,6 +4,6 @@ import ScheduleData from "../../types/ScheduleData";
 
 function Schedule(props: { data : ScheduleData }) {
     return (
-
+        <></>
     )
 }

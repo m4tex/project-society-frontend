@@ -4,9 +4,9 @@ import Header from "./Header";
 import styled from "styled-components";
 
 const MainContent = styled.main`
-  display: inline-block;
   margin-top: 65px;
-  width: 100%;
+  height: calc(100vh - 65px);
+  //width: 100%;
 `
 
 function Layout() {
