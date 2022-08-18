@@ -4,10 +4,10 @@ import styled from "styled-components";
 const Bar = styled.div`
   position: absolute;
   right: 0;
+  transform: translateX(50%);
   height: 100%;
-  width: 5px;
+  width: 6px;
   
-
   &:hover {
     cursor: e-resize;
   }

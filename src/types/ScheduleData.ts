@@ -4,24 +4,26 @@ export interface Activity {
     startTime : Number,
     endTime: Number,
     duration: Number,
-    colorStamp: string | null,
+    colorStamp?: string | undefined,
 
     title: string,
-    teacher: string | null,
-    place: string | null,
+    teacher?: string | undefined,
+    place?: string | undefined,
 
     assignment: boolean,
     exam: boolean,
 }
 
+export type ActivityWeek = [
+    Activity[],
+    Activity[],
+    Activity[],
+    Activity[],
+    Activity[],
+    Activity[],
+    Activity[],
+]
+
 export default interface ScheduleData {
-    data : [
-            Activity[],
-            Activity[],
-            Activity[],
-            Activity[],
-            Activity[],
-            Activity[],
-            Activity[],
-        ]
+    data : ActivityWeek
 }
