@@ -49,7 +49,7 @@ const CloseBar = styled.div`
 
 function ScheduleEditor() {
     const editorRef = useRef<HTMLDivElement>(null);
-    const [editorOpen, setEditorOpen] = useState(true);
+    const [editorOpen, ] = useState(true);
 
     return (
         <EditorBody ref={editorRef} open={editorOpen}>

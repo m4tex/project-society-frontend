@@ -25,7 +25,7 @@ function MainProvider(props : { children : JSX.Element | JSX.Element[] }) {
         logOut: logOutHandler,
     }
 
-    const [mainContext, setMainContext] = useState<ContextValue>(stateInit)
+    const [mainContext, ] = useState<ContextValue>(stateInit);
 
     function logInHandler(login: string, password:string) {
         // setMainContext((prevState) => {...prevState, isLoggedIn: true})
