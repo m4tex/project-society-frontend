@@ -17,6 +17,8 @@ const ScheduleBody = styled.div`
     background-color: ${(props: { theme: Theme }) => props.theme.tertiaryColor };
     border-radius: 3px;
     margin-right: 5px;
+    height: 5px !important;
+    margin-inline: 2px;
   }
 `;
 
@@ -24,7 +26,7 @@ function Schedule(props: { data : ActivityWeek }) {
     return (
         <ScheduleBody>
             <Scrollbars style={{left:'-1px', transform:'translateX(1px)'}} renderThumbHorizontal={ props => <div {...props} className='scroll-thumb-horizontal' /> }>
-
+                <div style={{width:'1000px', backgroundColor:'gray'}}>AAA</div>
             </Scrollbars>
         </ScheduleBody>
     );

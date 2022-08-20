@@ -113,7 +113,7 @@ const NavIndicator = styled.div`
   width: ${(props: IndicatorProps) => props.width}px;
   left: ${(props: IndicatorProps) => props.left}px;
 
-  transition: left 0.3s ease-out, width 0.3s ease-in;
+  transition: left 200ms ease-out, width 200ms ease-in;
 `
 
 const NavLink = styled.p`
@@ -242,7 +242,7 @@ function Header() {
     return (
         <StyledHeader>
             <h1 onClick={() => nav('/home')}>Unitor</h1>
-            <LogoDot /> 
+            <LogoDot />
             <BetaBadge>Beta</BetaBadge>
             <HeaderNavigation>
                 <NavLink selected={navState.navLinkSelection[0]} ref={nav1}
