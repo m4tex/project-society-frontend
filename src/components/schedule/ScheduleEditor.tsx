@@ -30,6 +30,8 @@ const CloseBar = styled.div`
   
   width: 22px;
   height: 100%;
+  
+  //sub-pixel gap fix
   right: -1px;
   top: -1px;
   transform: translate(-1px, 1px);
@@ -51,7 +53,7 @@ function ScheduleEditor() {
 
     return (
         <EditorBody ref={editorRef} open={editorOpen}>
-            <RightResizeBar toResize={editorRef} />
+            <RightResizeBar toResize={editorRef} style={{right:'-4px'}} />
             <CloseBar />
         </EditorBody>
     )

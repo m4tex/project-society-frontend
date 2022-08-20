@@ -13,7 +13,7 @@ const Bar = styled.div`
   }
 `;
 
-function RightResizeBar(props: { toResize: RefObject<HTMLElement>, className?: string }) {
+function RightResizeBar(props: { toResize: RefObject<HTMLElement>, className?: string, style?:object }) {
     function resize(e: MouseEvent) {
         props.toResize.current!.style.width = e.pageX - props.toResize.current!.getBoundingClientRect().left + 'px';
     }
@@ -30,7 +30,7 @@ function RightResizeBar(props: { toResize: RefObject<HTMLElement>, className?: s
         }
     }
 
-    return <Bar onMouseDown={handleResizer}/>
+    return <Bar onMouseDown={handleResizer} className={props?.className} style={props?.style}/>
 }
 
 export default RightResizeBar;

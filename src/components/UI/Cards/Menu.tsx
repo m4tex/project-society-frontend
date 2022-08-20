@@ -71,7 +71,7 @@ function Menu(props: { isOpen: boolean, options: MenuOption[], className: string
         return () => {
             document.removeEventListener('click', handleClick);
         }
-    }, [props.isOpen]);
+    }, [props]);
 
     return transition((style, item) => item ?
         <StyledMenuCard as={animated.div} className={props.className} style={style}>
