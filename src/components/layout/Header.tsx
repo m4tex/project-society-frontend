@@ -80,6 +80,7 @@ const HeaderNavigation = styled.nav`
 const AccountNavSection = styled.div`
   position: relative;
   margin-left: auto;
+  margin-right: 15px;
   
   display: flex;
   align-items: center;
@@ -93,16 +94,13 @@ const AccountNavSection = styled.div`
     font-size: 32px;
     margin-right: 12px;
   }
+`
 
-  .account-menu {
-    position: absolute;
-    top: 56px;
-    left: 3px;
-    
-    p {
-      font-size: 18px;
-    }
-  }
+const AccountMenu = styled(Menu)`
+  position: absolute;
+  
+  top: 58px;
+  left: 22px;
 `
 
 const NavIndicator = styled.div`
@@ -244,7 +242,7 @@ function Header() {
     return (
         <StyledHeader>
             <h1 onClick={() => nav('/home')}>Unitor</h1>
-            <LogoDot />
+            <LogoDot /> 
             <BetaBadge>Beta</BetaBadge>
             <HeaderNavigation>
                 <NavLink selected={navState.navLinkSelection[0]} ref={nav1}
@@ -265,10 +263,9 @@ function Header() {
             </HeaderNavigation>
             <AccountNavSection>
                 <span className='material-symbols-rounded interact'>notifications</span>
-                <AvatarCircle className='avatar' src='none'/>
-                <span className='material-icons interact' onClick={() => setAccountMenuShown(true)}>more_vert</span>
-                <Menu isOpen={accountMenuShown} options={accountOptions}
-                      className={'account-menu'} onClose={() => setAccountMenuShown(false)}/>
+                <AvatarCircle onClick={() => setAccountMenuShown(true)} className='avatar' src='none'/>
+                <AccountMenu isOpen={accountMenuShown} options={accountOptions} className={'account-menu'}
+                      onClose={() => setAccountMenuShown(false)}/>
             </AccountNavSection>
         </StyledHeader>
     );

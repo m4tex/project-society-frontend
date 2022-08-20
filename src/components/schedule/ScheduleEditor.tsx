@@ -14,7 +14,7 @@ const EditorBody = styled.div`
   margin-top: 12px;
   margin-bottom: 6px;
   min-width: 150px;
-  max-width: 600px;
+  max-width: 275px;
   height: calc(100% - 18px);
   
   background-color: ${(props: EditorProps) => props.theme.primaryColor};
@@ -28,15 +28,18 @@ const EditorBody = styled.div`
 const CloseBar = styled.div`
   position: absolute;
   
-  width: 15px;
+  width: 22px;
   height: 100%;
-  right: 0;
+  right: -1px;
+  top: -1px;
+  transform: translate(-1px, 1px);
   
   border-width: 0;
-  background-color: rgba(0, 0, 0, 0.05);
 
+  border-radius: 0 7px 7px 0;
+  
   &:hover {
-    //background-color: ${(props: { theme: Theme }) => props.theme.tertiaryColor};
+    // background-color: ${(props: { theme: Theme }) => props.theme.tertiaryColor};
     background-color: rgba(0, 0, 0, 0.05);
     transition: background-color 100ms ease-out;
   }

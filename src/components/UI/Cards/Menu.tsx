@@ -14,12 +14,21 @@ const Option = styled.p`
   display: inline-block;
   padding: 10px .8em;
   
+  //Sub-pixel rendering fix
+  right: -1px;
+  transform: translateX(-1px);
+  
+  &:last-child {
+    bottom: -1px;
+    transform: translate(-1px, -1px);
+  }
+  
   text-align: center;
   font-size: 14px;
   white-space: nowrap;
 
   color: ${(props: { theme: Theme }) => props.theme.secondaryColor};
-
+  
   &:hover {
     cursor: pointer;
     color: ${(props: { theme: Theme }) => props.theme.interactableColor};
@@ -33,6 +42,8 @@ const Option = styled.p`
     }
     
     background-color: rgba(0, 0, 0, 0.05);
+    
+    transition: all 100ms ease-in;
   }
 `;
 
